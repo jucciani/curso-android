@@ -1,0 +1,13 @@
+Melifile
+*.orig
+*.class
+.settings
+*stacktrace
+.classpath
+.project
+*.log
+
+#Directorios de binarios de compilacion
+.gradle/*
+/app/build/*
+/gradle/*

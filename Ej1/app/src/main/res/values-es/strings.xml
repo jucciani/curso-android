@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Ejercicio 1</string>
+    <string name="description">Indique el producto que desea buscar</string>
+    <string name="edit_message">Nombre del producto</string>
+    <string name="button_send">Buscar</string>
+    <string name="action_settings">Configuración</string>
+    <string name="title_activity_list_items">Resultados</string>
+    <string name="searching">Buscando.. .</string>
+    <string name="no_network">No se pudo establecer una conexión.</string>
+    <string name="error">Error al obtener resultados.</string>
+    <string name="no_items_found">No se encontraron resultados.</string>
+</resources>
