@@ -7,12 +7,14 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.ar.dto.Item;
@@ -20,8 +22,10 @@ import com.ar.activity.ListItemsActivity;
 
 public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
     private static int MAX_ITEMS_TO_SHOW = 100;
-    private static final String SEARCH_ITEM_URI = "https://api.mercadolibre.com/sites/MLA/search?q=";
-	private ListItemsActivity activity;
+    private static final String SEARCH_ITEM_URI = "https://api.mercadolibre.com/sites/MLA/search";
+    private static final String SEARCH_ITEM_QUERY_PARAM = "q";
+
+    private ListItemsActivity activity;
 	
 	public SearchItemTask(ListItemsActivity activity) {
 		this.activity = activity;
@@ -34,13 +38,18 @@ public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
 
 	@Override
 	protected ArrayList<Item> doInBackground(String... args) {
-		String uri = SearchItemTask.SEARCH_ITEM_URI + args[0];
 		InputStream is = null;
 		JSONObject result = null;
 	        
 	    try {
+            String query =  URLEncoder.encode(args[0], "utf-8");
+            String uri = Uri.parse(SearchItemTask.SEARCH_ITEM_URI)
+                    .buildUpon()
+                    .appendQueryParameter(SearchItemTask.SEARCH_ITEM_QUERY_PARAM, query)
+                    .build().toString();
 	        URL url = new URL(uri);
-	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 	        conn.setReadTimeout(10000 /* milliseconds */);
 	        conn.setConnectTimeout(15000 /* milliseconds */);
 	        conn.setRequestMethod("GET");
