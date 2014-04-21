@@ -1,4 +1,4 @@
-package com.example.ejercicio1;
+package com.ar.dto;
 
 import org.json.JSONException;
 import org.json.JSONObject;

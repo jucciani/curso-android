@@ -1,4 +1,4 @@
-package com.example.ejercicio1;
+package com.ar.task;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,6 +14,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+
+import com.ar.dto.Item;
+import com.ar.activity.ListItemsActivity;
 
 public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
     private static int MAX_ITEMS_TO_SHOW = 100;

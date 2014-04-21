@@ -1,4 +1,4 @@
-package com.example.ejercicio1;
+package com.ar.activity;
 
 import java.util.ArrayList;
 
@@ -18,13 +18,17 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.ar.dto.Item;
+import com.ar.R;
+import com.ar.task.SearchItemTask;
+
 public class ListItemsActivity extends Activity {
 	
 	private SearchItemTask task;
 	private String query;
 	private ArrayList<Item> itemsList;
-    private final static String ITEM_LIST = "com.example.ejercicio1.ITEM_LIST";
-    public final static String QUERY = "com.example.ejercicio1.QUERY";
+    private final static String ITEM_LIST = "com.ar.activity.ITEM_LIST";
+    public final static String QUERY = "com.ar.activity.QUERY";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
