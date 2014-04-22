@@ -10,11 +10,14 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.net.Uri;
+import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 
 import com.ar.dto.Item;
@@ -40,23 +43,20 @@ public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
 	protected ArrayList<Item> doInBackground(String... args) {
 		InputStream is = null;
 		JSONObject result = null;
-	        
+        AndroidHttpClient client = null;
+
 	    try {
             String query =  URLEncoder.encode(args[0], "utf-8");
             String uri = Uri.parse(SearchItemTask.SEARCH_ITEM_URI)
                     .buildUpon()
                     .appendQueryParameter(SearchItemTask.SEARCH_ITEM_QUERY_PARAM, query)
                     .build().toString();
-	        URL url = new URL(uri);
 
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-	        conn.setReadTimeout(10000 /* milliseconds */);
-	        conn.setConnectTimeout(15000 /* milliseconds */);
-	        conn.setRequestMethod("GET");
-	        conn.setDoInput(true);
-	        // Starts the query
-	        conn.connect();
-	        is = conn.getInputStream();
+            client = AndroidHttpClient.newInstance("Android");
+            HttpGet request = new HttpGet(uri);
+            HttpResponse response = client.execute(request); //here is where the exception is thrown
+            is = response.getEntity().getContent();
+
 
 	        // Creo un JSONObject con la respuesta
 		    result = new JSONObject(readIt(is));
@@ -65,6 +65,7 @@ public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
 	    } catch(Exception e) {
 	    		
 	    } finally {
+            if(client != null) client.close();
 	        if (is != null) {
 	            try {
 					is.close();
