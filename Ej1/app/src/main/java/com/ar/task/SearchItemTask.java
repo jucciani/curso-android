@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
@@ -61,10 +59,10 @@ public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
 	        // Creo un JSONObject con la respuesta
 		    result = new JSONObject(readIt(is));
 
-	    // Cerramos el InputStream.
 	    } catch(Exception e) {
 	    		
-	    } finally {
+	    } finally {// Cerramos la conexion y el InputStream.
+
             if(client != null) client.close();
 	        if (is != null) {
 	            try {
