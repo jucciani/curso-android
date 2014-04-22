@@ -11,5 +11,7 @@
     <string name="no_network">No network connection available.</string>
     <string name="error">Error while getting response.</string>
     <string name="no_items_found">No Items were found.</string>
-    
+    <string name="in_stock">&#160;in stock</string>
+    <string name="currency_symbol">$ </string>
+
 </resources>

@@ -11,4 +11,7 @@
     <string name="no_network">No se pudo establecer una conexión.</string>
     <string name="error">Error al obtener resultados.</string>
     <string name="no_items_found">No se encontraron resultados.</string>
+    <string name="in_stock">&#160;disponibles</string>
+    <string name="currency_symbol">$ </string>
+
 </resources>

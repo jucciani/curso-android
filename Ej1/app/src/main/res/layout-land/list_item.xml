@@ -12,12 +12,17 @@
 		            android:id="@+id/itemTitle"
 		            android:layout_height="wrap_content"
 		        	android:layout_weight="1"
-		        	android:layout_width="0dp"/>
+		        	android:layout_width="0dp"
+                    android:textStyle="bold"
+                    android:textSize="18dp" />
 		
 		        <TextView
 		            android:id="@+id/itemPrice"
 		        	android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"/>
+		            android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textColor="#900" />
 		
 		</LinearLayout>
 		<LinearLayout
@@ -26,10 +31,11 @@
 		    android:layout_height="wrap_content">
 		
 		        <TextView
-		            android:id="@+id/itemDescription"
+		            android:id="@+id/itemSubtitle"
 		            android:layout_height="wrap_content"
 		        	android:layout_weight="1"
-		        	android:layout_width="0dp"/>
+		        	android:layout_width="0dp"
+                    android:textStyle="italic" />
 		
 		        <TextView
 		            android:id="@+id/itemQuantity"

@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.ar.adapter.ItemArrayAdapter;
 import com.ar.dto.Item;
 import com.ar.R;
 import com.ar.task.SearchItemTask;
@@ -114,42 +115,7 @@ public class ListItemsActivity extends Activity {
      * @return
      */
 	private ArrayAdapter<Item> getItemsArrayAdapter(ArrayList<Item> itemsList) {
-		ArrayAdapter<Item> arrayAdapter = new ArrayAdapter<Item>(this, R.layout.list_item, itemsList){
-			@Override
-			public View getView(int position, View convertView, ViewGroup parent) {
-				LinearLayout itemView;
-				//Obtengo el Item actual
-				Item item = getItem(position);
-				if(convertView==null) {
-					itemView = new LinearLayout(getContext());
-		            String inflater = Context.LAYOUT_INFLATER_SERVICE;
-		            LayoutInflater vi;
-		            vi = (LayoutInflater)getContext().getSystemService(inflater);
-		            vi.inflate(R.layout.list_item, itemView, true);
-		        } else {
-		        	itemView = (LinearLayout) convertView;
-		        }
-				//Obtengo los TextView de la vista
-		        TextView itemTitle = (TextView)itemView.findViewById(R.id.itemTitle);
-		        TextView itemPrice = (TextView)itemView.findViewById(R.id.itemPrice);
-		        TextView itemDescription = (TextView)itemView.findViewById(R.id.itemDescription);
-		        TextView itemQuantity = (TextView)itemView.findViewById(R.id.itemQuantity);
-		        
-		        //Leno los textView con al info correspondiente del item.
-	        	itemTitle.setText(item.getTitle());
-	        	itemPrice.setText("$" +item.getPrice());
-	        	//Si existen los textViews -> estoy en landscape, cargo la info adicional.
-	        	if(itemDescription != null && item.getSubtitle() != null) {
-	        		itemDescription.setText(item.getSubtitle());
-	        	}
-	        	if(itemQuantity != null) {
-	        		itemQuantity.setText(item.getAvailableQuantity() + " disponibles");
-	        	}
-	        	//Devuelvo la vista cargada.
-				return itemView;
-			}
-		};
-		
+		ArrayAdapter<Item> arrayAdapter = new ItemArrayAdapter(this,itemsList);
         return arrayAdapter;
 	}
 
