@@ -28,7 +28,7 @@ public class ListItemsActivity extends Activity {
 	private SearchItemTask task;
 	private String query;
 	private ArrayList<Item> itemsList;
-    private final static int ITEMS_QUERY_LIMIT = 25;
+    private final static int ITEMS_QUERY_LIMIT = 15;
     private final static String ITEM_LIST = "com.ar.activity.ITEM_LIST";
     public final static String QUERY = "com.ar.activity.QUERY";
 
