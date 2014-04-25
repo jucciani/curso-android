@@ -10,13 +10,17 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ar.adapter.ItemArrayAdapter;
 import com.ar.dto.Item;
 import com.ar.R;
+import com.ar.listener.EndlessScrollListener;
 import com.ar.task.SearchItemTask;
 
 public class ListItemsActivity extends Activity {
@@ -24,6 +28,7 @@ public class ListItemsActivity extends Activity {
 	private SearchItemTask task;
 	private String query;
 	private ArrayList<Item> itemsList;
+    private final static int ITEMS_QUERY_LIMIT = 25;
     private final static String ITEM_LIST = "com.ar.activity.ITEM_LIST";
     public final static String QUERY = "com.ar.activity.QUERY";
 
@@ -53,18 +58,17 @@ public class ListItemsActivity extends Activity {
 			drawItemList(this.itemsList);
 		} else if(this.query != null) {
 			//Si tengo query, ejecuto la búsqueda.
-			searchItems(this.query);
+			searchItems();
 		} else {
 			//Sino muestro un error.
-        	TextView textView = (TextView) findViewById(R.id.list_item_desc);
-            textView.setText(getResources().getString(R.string.error));
+            showMessage(getResources().getString(R.string.error));
 		}
 	}
 
     /**
      * Ejecuta la búsqueda en un asynktask basandose en la query ingresada.
      */
-	private void searchItems(String query){
+	public void searchItems(){
 	    //Verifico la conectividad
         ConnectivityManager connMgr = (ConnectivityManager) 
             getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -72,10 +76,13 @@ public class ListItemsActivity extends Activity {
         //Si hay conexión, ejecuto la búsqueda
         if (networkInfo != null && networkInfo.isConnected()) {
            this.task = new SearchItemTask(this);
-           task.execute(query);
+           int offset = 0;
+            if(this.itemsList != null){
+                offset = this.itemsList.size();
+            }
+           task.execute(query,String.valueOf(ITEMS_QUERY_LIMIT),String.valueOf(offset));
         } else {
-        	TextView textView = (TextView) findViewById(R.id.list_item_desc);
-            textView.setText(getResources().getString(R.string.no_network));
+            showMessage(getResources().getString(R.string.no_network));
         }
 	}
 
@@ -84,25 +91,34 @@ public class ListItemsActivity extends Activity {
      * @param results
      */
 	public void showResults(ArrayList<Item> results){
-			this.itemsList = results;
-			drawItemList(this.itemsList);
+        if(this.itemsList == null){
+            this.itemsList = results;
+            drawItemList(results);
+        } else {
+            this.itemsList.addAll(results);
+            arrayAdapter.notifyDataSetChanged();
+            scrollListener.setLoading(false);
+        }
 	}
 
+    private ArrayAdapter<Item> arrayAdapter;
+    private EndlessScrollListener scrollListener;
     /**
      * Dibuja la lista de items en un ListView.
      */
 	private void drawItemList(ArrayList<Item> itemsList){
 		//Si tengo items en la lista, dibujo la lista.
-		if (!itemsList.isEmpty()){
-			ArrayAdapter<Item> arrayAdapter = getItemsArrayAdapter(itemsList);
+		if (itemsList != null){
+			arrayAdapter = getItemsArrayAdapter(itemsList);
 			ListView lv = new ListView(this);
-			
-			lv.setAdapter(arrayAdapter); 
-			setContentView(lv);			
+            scrollListener = new EndlessScrollListener(this);
+            lv.setOnScrollListener(scrollListener);
+            lv.setAdapter(arrayAdapter);
+
+			setContentView(lv);
 		} else {
 			//Si no hay items, muestro un mensaje.
-			TextView textView = (TextView) findViewById(R.id.list_item_desc);
-            textView.setText(getResources().getString(R.string.no_items_found));
+			showMessage(getResources().getString(R.string.no_items_found));
 		}
 	}
 
@@ -114,6 +130,16 @@ public class ListItemsActivity extends Activity {
 		ArrayAdapter<Item> arrayAdapter = new ItemArrayAdapter(this,itemsList);
         return arrayAdapter;
 	}
+
+    /**
+     * Muestra un mensaje por pantalla
+     * @param message
+     */
+    private void showMessage(String message){
+        TextView textView = new TextView(this);
+        textView.setText(message);
+        setContentView(textView);
+    }
 
     /**
      * Guardo el estado actual del Activity (query e itemList), cancelo el AsyncTask si se está ejecutando.

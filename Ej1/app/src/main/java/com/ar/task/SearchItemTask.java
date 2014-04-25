@@ -25,6 +25,9 @@ public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
     private static int MAX_ITEMS_TO_SHOW = 100;
     private static final String SEARCH_ITEM_URI = "https://api.mercadolibre.com/sites/MLA/search";
     private static final String SEARCH_ITEM_QUERY_PARAM = "q";
+    private static final String LIMIT_QUERY_PARAM = "limit";
+    private static final String OFFSET_QUERY_PARAM = "offset";
+
 
     private ListItemsActivity activity;
 	
@@ -45,10 +48,15 @@ public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
 
 	    try {
             String query =  URLEncoder.encode(args[0], "utf-8");
-            String uri = Uri.parse(SearchItemTask.SEARCH_ITEM_URI)
+            Uri.Builder uriBuilder = Uri.parse(SearchItemTask.SEARCH_ITEM_URI)
                     .buildUpon()
-                    .appendQueryParameter(SearchItemTask.SEARCH_ITEM_QUERY_PARAM, query)
-                    .build().toString();
+                    .appendQueryParameter(SearchItemTask.SEARCH_ITEM_QUERY_PARAM, query);
+            //Si recibo mas parametros es porque recibo el limit y el offset
+            if(args.length > 1){
+                uriBuilder.appendQueryParameter(SearchItemTask.LIMIT_QUERY_PARAM,args[1]);
+                uriBuilder.appendQueryParameter(SearchItemTask.OFFSET_QUERY_PARAM,args[2]);
+            }
+            String uri = uriBuilder.build().toString();
 
             client = AndroidHttpClient.newInstance("Android");
             HttpGet request = new HttpGet(uri);
@@ -101,12 +109,13 @@ public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
      * @return
      */
     private ArrayList<Item> getItemsArray(JSONObject result) {
-        ArrayList<Item> newList = new ArrayList<Item>();
+        ArrayList<Item> newList = null;
         if(result != null) {
             try {
                 JSONArray resultsArray = result.getJSONArray("results");
                 //Convierto el JSONArray a una lista de Items
                 int maxItems = Math.max(resultsArray.length(), SearchItemTask.MAX_ITEMS_TO_SHOW);
+                newList = new ArrayList<Item>();
                 for (int i = 0; i < maxItems; i++) {
                     try {
                         newList.add(new Item(resultsArray.getJSONObject(i)));
@@ -114,6 +123,7 @@ public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
                         //Hubo un error parseando el item, no lo agrego a la lista.
                     }
                 }
+                if(newList.isEmpty()) newList = null;
             } catch (JSONException e1) {
                 //Si hubo un error al parsear el JSONArray, devuelvo la lista vacía.
             }

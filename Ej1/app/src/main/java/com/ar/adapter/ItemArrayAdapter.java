@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ar.R;
@@ -33,6 +34,7 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
             holder.price = (TextView)convertView.findViewById(R.id.itemPrice);
             holder.subtitle = (TextView)convertView.findViewById(R.id.itemSubtitle);
             holder.quantity = (TextView)convertView.findViewById(R.id.itemQuantity);
+            holder.progressBar = (ProgressBar)convertView.findViewById(R.id.item_progress);
             //Guardo holder
             convertView.setTag(holder);
         } else {
@@ -52,6 +54,12 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
         if(holder.quantity != null) {
             holder.quantity.setText(item.getAvailableQuantity() + getContext().getResources().getString(R.string.in_stock));
         }
+
+        if(position == getCount()-1){
+            holder.progressBar.setVisibility(View.VISIBLE);
+        } else {
+            holder.progressBar.setVisibility(View.GONE);
+        }
         //Devuelvo la vista cargada.
         return convertView;
     }
@@ -61,5 +69,6 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
         public TextView price;
         public TextView subtitle;
         public TextView quantity;
+        public ProgressBar progressBar;
     }
 }
