@@ -2,65 +2,98 @@ package com.ar.dto;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+public class Item implements Serializable {
 
-public class Item implements Parcelable{
+    public final static String CONDITION_NEW = "new";
+    private String id;
 	private String title;
 	private String subtitle;
 	private double price;
 	private int availableQuantity;
-	
-	public Item(JSONObject json) throws JSONException{
+    private String thumbnailURL;
+    private String pictureURL;
+    private String condition;
+    private String city;
+    private String state;
+
+	public Item(JSONObject json) throws JSONException {
+        this.id = json.getString("id");
 		this.title = json.getString("title");
 		if(json.getString("subtitle") != "null") this.subtitle = json.getString("subtitle");
 		this.price = json.getDouble("price");
 		this.availableQuantity = json.getInt("available_quantity");
-	}
-	
-	public Item(Parcel in){
-		this.title = in.readString();
-		this.price = in.readDouble();
-		this.availableQuantity = in.readInt();
-	}
-	
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-	
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(this.title);
-		dest.writeDouble(this.price);
-		dest.writeInt(this.availableQuantity);
-		
-	}
-
-	public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
-        public Item createFromParcel(Parcel in) {
-            return new Item(in);
+        this.thumbnailURL = json.getString("thumbnail");
+        if(json.has("pictures")){
+            this.pictureURL = json.getJSONArray("pictures").getJSONObject(0).getString("url");
         }
-
-        public Item[] newArray(int size) {
-            return new Item[size];
+        if(json.has("condition")){
+            this.condition = json.getString("condition");
         }
-    };
+        if(json.has("seller_address")){
+            if(json.getJSONObject("seller_address").has("state") &&
+                    json.getJSONObject("seller_address").getJSONObject("state").has("name")){
+                this.state = json.getJSONObject("seller_address").getJSONObject("state").getString("name");
+            }
+            if(json.getJSONObject("seller_address").has("city") &&
+                    json.getJSONObject("seller_address").getJSONObject("city").has("name")){
+                this.city = json.getJSONObject("seller_address").getJSONObject("city").getString("name");
+            }
+        }
+	}
 
 	public String getTitle() {
 		return title;
 	}
-	
+
 	public String getSubtitle() {
 		return subtitle;
 	}
-	
+
 	public int getAvailableQuantity() {
 		return availableQuantity;
 	}
-	
+
 	public double getPrice() {
 		return price;
 	}
+
+    public String getId() {
+        return id;
+    }
+
+    public URL getThumbnailURL() {
+        if(thumbnailURL == null || thumbnailURL.isEmpty()) return null;
+        try {
+            return new URL(thumbnailURL);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public URL getPictureURL() {
+        if(pictureURL == null || pictureURL.isEmpty()) return null;
+        try {
+            return new URL(pictureURL);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getState() {
+        return state;
+    }
 }

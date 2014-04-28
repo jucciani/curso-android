@@ -2,22 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFF">
 		<LinearLayout
 		    android:orientation="horizontal"
 		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content">
 
-            <ImageView
+            <com.ar.view.ItemImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:id="@+id/imageView"
-                android:background="@drawable/ic_launcher" />
+                android:id="@+id/itemImage"
+                android:background="@drawable/ic_action_picture"/>            />
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                android:paddingLeft="5dp">
 
 
                 <TextView

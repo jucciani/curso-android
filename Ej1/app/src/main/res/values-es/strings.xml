@@ -12,6 +12,12 @@
     <string name="error">Error al obtener resultados.</string>
     <string name="no_items_found">No se encontraron resultados.</string>
     <string name="in_stock">&#160;disponibles</string>
-    <string name="currency_symbol">$ </string>
+    <string name="currency_symbol">$&#160;</string>
+    <string name="quantity_separator">&#160;-&#160;</string>
+    <string name="title_activity_vip">Artículo</string>
+    <string name="found_items">&#160;resultados</string>
+    <string name="new_item">Artículo nuevo</string>
+    <string name="used_item">Artículo usado</string>
+    <string name="buy">Comprar</string>
 
 </resources>

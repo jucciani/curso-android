@@ -28,6 +28,7 @@ public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
     private static final String LIMIT_QUERY_PARAM = "limit";
     private static final String OFFSET_QUERY_PARAM = "offset";
 
+    private int totalResults = 0;
 
     private ListItemsActivity activity;
 	
@@ -36,16 +37,10 @@ public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
 	}
 
 	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-	}
-
-	@Override
 	protected ArrayList<Item> doInBackground(String... args) {
 		InputStream is = null;
 		JSONObject result = null;
         AndroidHttpClient client = null;
-
 	    try {
             String query =  URLEncoder.encode(args[0], "utf-8");
             Uri.Builder uriBuilder = Uri.parse(SearchItemTask.SEARCH_ITEM_URI)
@@ -88,7 +83,7 @@ public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
 	protected void onPostExecute(ArrayList<Item> results) {
 		super.onPostExecute(results);
         //Si tengo activity, muestro el resultado.
-		if(this.activity != null) this.activity.showResults(results);
+		if(this.activity != null) this.activity.showResults(results, totalResults);
 	}
 
 	//Transforma el InputStream a String.
@@ -112,6 +107,7 @@ public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
         ArrayList<Item> newList = null;
         if(result != null) {
             try {
+                this.totalResults = result.getJSONObject("paging").getInt("total");
                 JSONArray resultsArray = result.getJSONArray("results");
                 //Convierto el JSONArray a una lista de Items
                 int maxItems = Math.max(resultsArray.length(), SearchItemTask.MAX_ITEMS_TO_SHOW);

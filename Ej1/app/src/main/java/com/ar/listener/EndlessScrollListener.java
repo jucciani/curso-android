@@ -1,16 +1,14 @@
 package com.ar.listener;
 
 import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
 
 import com.ar.activity.ListItemsActivity;
-import com.ar.dto.Item;
 
 /**
  * Created by jucciani on 24/04/14.
  */
 public class EndlessScrollListener implements AbsListView.OnScrollListener{
-    private boolean loading = false;
+    private boolean loading = true;
 
     private ListItemsActivity activity;
 

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.ar.R;
 import com.ar.dto.Item;
+import com.ar.view.ItemImageView;
 
 import java.util.ArrayList;
 
@@ -35,6 +36,7 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
             holder.subtitle = (TextView)convertView.findViewById(R.id.itemSubtitle);
             holder.quantity = (TextView)convertView.findViewById(R.id.itemQuantity);
             holder.progressBar = (ProgressBar)convertView.findViewById(R.id.item_progress);
+            holder.itemImage = (ItemImageView)convertView.findViewById(R.id.itemImage);
             //Guardo holder
             convertView.setTag(holder);
         } else {
@@ -47,6 +49,9 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
         //Lleno los textView con al info correspondiente del item.
         holder.title.setText(item.getTitle());
         holder.price.setText(getContext().getResources().getString(R.string.currency_symbol) + item.getPrice());
+        if(item.getThumbnailURL() != null){
+            holder.itemImage.setImageURL(item.getThumbnailURL(),true,getContext().getResources().getDrawable(R.drawable.ic_action_picture));
+        }
         //Si existen los textViews -> estoy en landscape, cargo la info adicional.
         if(holder.subtitle != null && item.getSubtitle() != null) {
             holder.subtitle.setText(item.getSubtitle());
@@ -70,5 +75,6 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
         public TextView subtitle;
         public TextView quantity;
         public ProgressBar progressBar;
+        public ItemImageView itemImage;
     }
 }
