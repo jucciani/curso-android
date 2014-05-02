@@ -3,13 +3,14 @@ package com.ar.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import com.ar.R;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity implements SearchItemFragment.SearchItemListener{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,16 +19,15 @@ public class MainActivity extends Activity {
 
 	}
 
-	public void searchItem(View view) {
-		//Obtengo el texto a buscar
-	    String query = ((EditText) findViewById(R.id.query)).getText().toString();
+    @Override
+    public void onSearchButtonClick(String query) {
         //Creo el Intent para cargar la nueva Activity
         Intent intent = new Intent(this,ListItemsActivity.class);
         //Le asigno el parametro 'query'
         intent.putExtra(ListItemsActivity.QUERY, query);
         //Ejecuto la nueva activity
-	    startActivity(intent);
-	}
+        startActivity(intent);
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
