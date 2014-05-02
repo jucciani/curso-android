@@ -1,7 +1,6 @@
 package com.ar.activity;
 
 import java.util.ArrayList;
-import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
