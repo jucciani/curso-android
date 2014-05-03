@@ -3,6 +3,7 @@ package com.ar.listener;
 import android.widget.AbsListView;
 
 import com.ar.activity.ListItemsActivity;
+import com.ar.activity.SearchFragment;
 
 /**
  * Created by jucciani on 24/04/14.
@@ -10,9 +11,9 @@ import com.ar.activity.ListItemsActivity;
 public class EndlessScrollListener implements AbsListView.OnScrollListener{
     private boolean loading = true;
 
-    private ListItemsActivity activity;
+    private SearchFragment activity;
 
-    public EndlessScrollListener(ListItemsActivity activity) {
+    public EndlessScrollListener(SearchFragment activity) {
         this.activity = activity;
     }
 

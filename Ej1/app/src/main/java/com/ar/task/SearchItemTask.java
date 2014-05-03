@@ -30,10 +30,14 @@ public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
 
     private int totalResults = 0;
 
-    private ListItemsActivity activity;
+    private ResultsHandler resultHandler;
+
+    public interface ResultsHandler {
+        public void showResults(ArrayList<Item> results, int totalResults);
+       }
 	
-	public SearchItemTask(ListItemsActivity activity) {
-		this.activity = activity;
+	public SearchItemTask(ResultsHandler resultHandler) {
+		this.resultHandler = resultHandler;
 	}
 
 	@Override
@@ -83,7 +87,7 @@ public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
 	protected void onPostExecute(ArrayList<Item> results) {
 		super.onPostExecute(results);
         //Si tengo activity, muestro el resultado.
-		if(this.activity != null) this.activity.showResults(results, totalResults);
+		if(this.resultHandler != null) this.resultHandler.showResults(results, totalResults);
 	}
 
 	//Transforma el InputStream a String.
@@ -129,7 +133,7 @@ public class SearchItemTask extends AsyncTask<String, Void, ArrayList<Item>> {
 
 
     public void detach() {
-		this.activity = null;
+		this.resultHandler = null;
 	}
 
 }
