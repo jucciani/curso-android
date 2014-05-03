@@ -40,6 +40,17 @@ public class SearchFragment extends ListFragment implements SearchItemTask.Resul
     private final static String ITEM_LIST = "com.ar.activity.ITEM_LIST";
     public final static String QUERY = "com.ar.activity.QUERY";
 
+    /**
+     * Crea una nueva instancia del SearchFragment inicializandola con el query.
+     */
+    public static SearchFragment newInstance(String query) {
+        SearchFragment newFragment = new SearchFragment();
+        Bundle args = new Bundle();
+        args.putString(SearchFragment.QUERY, query);
+        newFragment.setArguments(args);
+        return newFragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Me fijo si se esta recuperando o creando por primera vez.

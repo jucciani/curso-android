@@ -38,17 +38,9 @@ public class ListItemsActivity extends Activity implements SearchFragment.OnItem
 
     private void loadSearchFragment(){
         //Si estoy recuperando no creo uno nuevo
-        SearchFragment searchFrag = (SearchFragment)
-                getFragmentManager().findFragmentById(R.id.search_fragment);
-
-        if(searchFrag == null){
-            SearchFragment newFragment = new SearchFragment();
-            Bundle args = new Bundle();
-            args.putString(SearchFragment.QUERY, this.query);
-            newFragment.setArguments(args);
-
+        if(getFragmentManager().findFragmentById(R.id.search_fragment) == null){
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.search_fragment, newFragment);
+            transaction.replace(R.id.search_fragment, SearchFragment.newInstance(this.query));
             transaction.commit();
         }
     }

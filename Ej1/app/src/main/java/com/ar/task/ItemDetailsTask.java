@@ -22,10 +22,13 @@ import java.net.URLEncoder;
 public class ItemDetailsTask extends AsyncTask<String, Void, Item> {
 
     private static final String ITEM_DETAILS_URI = "https://api.mercadolibre.com/items/";
-    private VIPActivity activity;
+    private ItemDetailsListener itemDetailsListener;
 
-    public ItemDetailsTask(VIPActivity activity){
-        this.activity = activity;
+    public interface ItemDetailsListener {
+        public void updateItemDetails(Item item);
+    }
+    public ItemDetailsTask(ItemDetailsListener itemDetailsListener){
+        this.itemDetailsListener = itemDetailsListener;
     }
 
     @Override
@@ -74,7 +77,7 @@ public class ItemDetailsTask extends AsyncTask<String, Void, Item> {
     @Override
     protected void onPostExecute(Item item) {
         super.onPostExecute(item);
-        if(this.activity != null) this.activity.updateItemDetails(item);
+        if(this.itemDetailsListener != null) this.itemDetailsListener.updateItemDetails(item);
     }
 
     //Transforma el InputStream a String.
@@ -90,6 +93,6 @@ public class ItemDetailsTask extends AsyncTask<String, Void, Item> {
     }
 
     public void detach(){
-        this.activity = null;
+        this.itemDetailsListener = null;
     }
 }
