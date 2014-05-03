@@ -1,29 +1,15 @@
 package com.ar.activity;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.ar.adapter.ItemArrayAdapter;
 import com.ar.dto.Item;
 import com.ar.R;
-import com.ar.listener.EndlessScrollListener;
 import com.ar.manager.ImageDownloadManager;
-import com.ar.task.SearchItemTask;
 
 public class ListItemsActivity extends Activity implements SearchFragment.OnItemSelectedListener {
 
