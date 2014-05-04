@@ -20,6 +20,10 @@ public class Item implements Serializable {
     private String city;
     private String state;
 
+    public Item(String itemId){
+        this.id = itemId;
+    }
+
 	public Item(JSONObject json) throws JSONException {
         this.id = json.getString("id");
 		this.title = json.getString("title");
@@ -61,8 +65,16 @@ public class Item implements Serializable {
 		return price;
 	}
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public URL getThumbnailURL() {

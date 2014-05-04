@@ -59,4 +59,5 @@ public class VIPActivity extends Activity {
         super.onStop();
         ImageDownloadManager.cancelAll();
     }
+
 }

@@ -19,5 +19,6 @@
     <string name="new_item">Artículo nuevo</string>
     <string name="used_item">Artículo usado</string>
     <string name="buy">Comprar</string>
-
+    <string name="trackItem">Recibir notificaciones</string>
+    <string name="untrackItem">Dejar de recibir notificaciones</string>
 </resources>

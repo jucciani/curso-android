@@ -1,18 +1,25 @@
 package com.ar.activity;
 
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ar.R;
 import com.ar.dto.Item;
+import com.ar.service.TrackItemService;
 import com.ar.task.ItemDetailsTask;
 import com.ar.view.ItemImageView;
 
@@ -22,9 +29,13 @@ import com.ar.view.ItemImageView;
 public class VIPFragment extends Fragment implements ItemDetailsTask.ItemDetailsListener{
     public static final String ITEM = "com.ar.activity.ITEM";
     private static final String TASK_COMPLETED = "com.ar.activity.TASK_COMPLETED";
+    private static final String TRACKED_ITEM = "com.ar.activity.TRACKED_ITEM";
 
     private Item item;
     private ItemDetailsTask task;
+    private Button trackButton;
+    private ProgressBar trackItemProgress;
+    private boolean trackedItem = false;
 
     /**
      * Crea una nueva instancia del VIPFragment inicializandola con el item.
@@ -49,11 +60,34 @@ public class VIPFragment extends Fragment implements ItemDetailsTask.ItemDetails
             //Obtengo el Item de la instancia anterior
             this.item = (Item)savedInstanceState.getSerializable(VIPFragment.ITEM);
             shouldFillDetails = !savedInstanceState.getBoolean(VIPFragment.TASK_COMPLETED);
+            this.trackedItem = savedInstanceState.getBoolean(VIPFragment.TRACKED_ITEM);
         }
         if(shouldFillDetails){
             fillItemDetails();
         }
+        trackButton = (Button)view.findViewById(R.id.track_item);
+        trackItemProgress = (ProgressBar)view.findViewById(R.id.track_item_progress);
+        if(this.trackedItem){
+            notifyTrackedItem();
+        }
+        trackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onTrackButtonClick();
+            }
+        });
         updateItemDetails(this.item, view);
+        //Escucha si el item estaba trackeado.
+        LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(getActivity());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(RECEIVE_ITEM);
+        intentFilter.addAction(DELETED_ITEM);
+        bManager.registerReceiver(bReceiver, intentFilter);
+        //Busco el Item
+        Intent intent = new Intent(getActivity(), TrackItemService.class);
+        intent.putExtra(TrackItemService.ACTION_NAME,TrackItemService.READ_ITEM);
+        intent.putExtra(TrackItemService.ITEM,this.item);
+        getActivity().startService(intent);
         //return super.onCreateView(inflater, container, savedInstanceState);
         return view;
     }
@@ -90,7 +124,8 @@ public class VIPFragment extends Fragment implements ItemDetailsTask.ItemDetails
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(VIPActivity.ITEM, this.item);
+        outState.putSerializable(VIPFragment.ITEM, this.item);
+        outState.putBoolean(VIPFragment.TRACKED_ITEM, this.trackedItem);
 
         //Verifico si se ejecuto el task
         if(this.task != null && this.task.getStatus() == AsyncTask.Status.FINISHED) {
@@ -104,4 +139,61 @@ public class VIPFragment extends Fragment implements ItemDetailsTask.ItemDetails
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(getActivity());
+        bManager.unregisterReceiver(bReceiver);
+    }
+
+    public void onTrackButtonClick() {
+        Intent intent = new Intent(getActivity(), TrackItemService.class);
+        if(!this.trackedItem){
+            intent.putExtra(TrackItemService.ACTION_NAME,TrackItemService.SAVE_ITEM);
+        } else {
+            intent.putExtra(TrackItemService.ACTION_NAME,TrackItemService.DELETE_ITEM);
+        }
+        intent.putExtra(TrackItemService.ITEM,this.item);
+        getActivity().startService(intent);
+    }
+
+    //Your activity will respond to this action String
+    public static final String RECEIVE_ITEM = "com.ar.activity.RECEIVE_ITEM";
+    public static final String DELETED_ITEM = "com.ar.activity.DELETED_ITEM";
+
+
+    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(RECEIVE_ITEM)){
+                Item item = (Item)intent.getSerializableExtra(ITEM);
+                if(item != null){
+                    notifyTrackedItem();
+                } else {
+                    notifyUntrackedItem();
+                }
+            } else if(intent.getAction().equals(DELETED_ITEM)){
+                notifyUntrackedItem();
+            }
+        }
+    };
+
+    public void notifyTrackedItem(){
+        this.trackButton.setText(getString(R.string.untrackItem));
+        this.trackedItem = true;
+        this.trackButton.setVisibility(View.VISIBLE);
+        if(trackItemProgress != null){
+            trackItemProgress.setVisibility(View.GONE);
+            trackItemProgress = null;
+        }
+    }
+    public void notifyUntrackedItem(){
+        this.trackButton.setText(getString(R.string.trackItem));
+        this.trackedItem = false;
+        this.trackButton.setVisibility(View.VISIBLE);
+        if(trackItemProgress != null){
+            trackItemProgress.setVisibility(View.GONE);
+            trackItemProgress = null;
+        }
+    }
 }

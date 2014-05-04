@@ -19,5 +19,7 @@
     <string name="new_item">New Item</string>
     <string name="used_item">Used Item</string>
     <string name="buy">Buy</string>
+    <string name="trackItem">Track item</string>
+    <string name="untrackItem">Untrack item</string>
 
 </resources>

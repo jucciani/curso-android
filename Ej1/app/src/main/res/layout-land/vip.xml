@@ -55,11 +55,22 @@
             android:id="@+id/vipItemDescription"
             android:layout_weight="1" />
 
+        <ProgressBar
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/track_item_progress"/>
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/trackItem"
+            android:visibility="gone"
+            android:clickable="true"
+            android:id="@+id/track_item"/>
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/buy"
-            android:id="@+id/button"
+            android:id="@+id/buy"
             android:background="#3e52a1"
             android:textColor="#FFF"
             android:textStyle="bold"
