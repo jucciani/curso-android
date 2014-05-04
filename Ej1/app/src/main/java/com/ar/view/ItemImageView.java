@@ -71,19 +71,6 @@ public class ItemImageView extends ImageView {
     }
 
     /**
-     * Creates an ImageDownloadView, gets attribute values, and applies a default style
-     * @param context A context for the View
-     * @param attributeSet The entire set of attributes for the View
-     * @param defaultStyle The default style to use with the View
-     */
-    public ItemImageView(Context context, AttributeSet attributeSet, int defaultStyle) {
-        super(context, attributeSet, defaultStyle);
-
-        // Gets attributes associated with the attribute set
-        getAttributes(attributeSet);
-    }
-
-    /**
      * Gets the resource ID for the hideShowSibling resource
      * @param attributeSet The entire set of attributes for the View
      */
@@ -118,13 +105,6 @@ public class ItemImageView extends ImageView {
         }
     }
 
-    /**
-     * Sets the image in this ImageView to null, and makes the View visible
-     */
-    public void clearImage() {
-        setImageDrawable(null);
-        showView(View.VISIBLE);
-    }
 
     /**
      * Returns the URL of the picture associated with this ImageView
@@ -204,15 +184,6 @@ public class ItemImageView extends ImageView {
         }
         // Always call the super method last
         super.onDraw(canvas);
-    }
-
-    /**
-     * Sets the current View weak reference to be the incoming View. See the definition of
-     * mThisView
-     * @param view the View to use as the new WeakReference
-     */
-    public void setHideView(View view) {
-        this.mThisView = new WeakReference<View>(view);
     }
 
     @Override
@@ -306,30 +277,6 @@ public class ItemImageView extends ImageView {
              * file's contents may be taken from the cache.
              */
             mDownloadThread = ImageDownloadManager.startDownload(this, cacheFlag);
-        }
-    }
-
-    /**
-     * Sets the Drawable for this ImageView
-     * @param drawable A Drawable to use for the ImageView
-     */
-    public void setStatusDrawable(Drawable drawable) {
-
-        // If the View is empty, sets a Drawable as its content
-        if (mThisView == null) {
-            setImageDrawable(drawable);
-        }
-    }
-
-    /**
-     * Sets the content of this ImageView to be a Drawable resource
-     * @param resId
-     */
-    public void setStatusResource(int resId) {
-
-        // If the View is empty, provides it with a Drawable resource as its content
-        if (mThisView == null) {
-            setImageResource(resId);
         }
     }
 }
