@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.ar.R;
 import com.ar.dto.Item;
 import com.ar.service.TrackItemService;
+import com.ar.service.TrackNotificationService;
 import com.ar.task.ItemDetailsTask;
 import com.ar.view.ItemImageView;
 
@@ -199,6 +201,11 @@ public class VIPFragment extends Fragment implements ItemDetailsTask.ItemDetails
         if(this.trackItemProgress != null){
             this.trackItemProgress.setVisibility(View.GONE);
             this.trackItemProgress = null;
+        }
+        Log.d("NOTIFY","notifyTrackedItem");
+        if(!TrackNotificationService.isMyServiceRunning(getActivity())){
+            Intent intent = new Intent(getActivity(), TrackNotificationService.class);
+            getActivity().startService(intent);
         }
     }
     public void notifyUntrackedItem(){

@@ -20,8 +20,6 @@ public class TrackItemService extends IntentService {
     public static final String READ_ITEM = "READ_ITEM";
     public static final String DELETE_ITEM = "DELETE_ITEM";
 
-
-
     public TrackItemService(){
         super("TrackItemService");
     }

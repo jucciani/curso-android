@@ -36,6 +36,9 @@
         <service
                 android:name=".service.TrackItemService"
                 android:exported="false"/>
+        <service
+            android:name=".service.TrackNotificationService"
+            android:exported="false"/>
     </application>
 
 </manifest>

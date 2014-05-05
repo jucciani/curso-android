@@ -9,13 +9,16 @@ import android.provider.BaseColumns;
 
 import com.ar.dto.Item;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by jucciani on 04/05/14.
  */
 public class ItemDbHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
-        public static final String DATABASE_NAME = "Item.db";
+        public static final String DATABASE_NAME = "ItemNotifications.db";
 
     public ItemDbHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -47,6 +50,7 @@ public class ItemDbHelper extends SQLiteOpenHelper {
                 ItemContract.ItemEntry.TABLE_NAME,
                 null,
                 values);
+        db.close();
     }
 
     public Item readItem(String itemId){
@@ -73,18 +77,20 @@ public class ItemDbHelper extends SQLiteOpenHelper {
                 null                                 // The sort order
         );
         Item item = null;
-        if(c.getCount() >0){
+        if(c.getCount() != 0){
             item = new Item(itemId);
             c.moveToFirst();
             item.setPrice(c.getDouble(
                     c.getColumnIndexOrThrow(ItemContract.ItemEntry.COLUMN_NAME_PRICE)
             ));
         }
+        c.close();
+        db.close();
         return item;
     }
 
     public void deleteItem(String itemId){
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
 
         // Define 'where' part of query.
         String selection = ItemContract.ItemEntry.COLUMN_NAME_ITEM_ID + " LIKE ?";
@@ -92,6 +98,41 @@ public class ItemDbHelper extends SQLiteOpenHelper {
         String[] selectionArgs = { String.valueOf(itemId) };
         // Issue SQL statement.
         db.delete(ItemContract.ItemEntry.TABLE_NAME, selection, selectionArgs);
+        db.close();
+    }
+
+    public List<Item> getAllItems(){
+        SQLiteDatabase db = getReadableDatabase();
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                ItemContract.ItemEntry.COLUMN_NAME_ITEM_ID,
+                ItemContract.ItemEntry.COLUMN_NAME_PRICE
+        };
+
+        Cursor c = db.query(
+                ItemContract.ItemEntry.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                null,                                // The columns for the WHERE clause
+                null,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                 // The sort order
+        );
+        List<Item> items = null;
+        int count = c.getCount();
+        if(count != 0){
+            items = new ArrayList<Item>();
+            for (int i = 0; i < count; ++i){
+                c.moveToNext();
+                Item item = new Item(c.getString(c.getColumnIndexOrThrow(ItemContract.ItemEntry.COLUMN_NAME_ITEM_ID)));
+                item.setPrice(c.getDouble(c.getColumnIndexOrThrow(ItemContract.ItemEntry.COLUMN_NAME_PRICE)));
+                items.add(item);
+            }
+        }
+        c.close();
+        db.close();
+        return items;
     }
 
     public static final class ItemContract {

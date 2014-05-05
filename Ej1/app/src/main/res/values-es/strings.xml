@@ -21,4 +21,7 @@
     <string name="buy">Comprar</string>
     <string name="trackItem">Recibir notificaciones</string>
     <string name="untrackItem">Dejar de recibir notificaciones</string>
+    <string name="newPrice">Nuevo precio del producto!! !</string>
+    <string name="newPrceTxt">New price: $ "</string>
+
 </resources>

@@ -21,5 +21,7 @@
     <string name="buy">Buy</string>
     <string name="trackItem">Track item</string>
     <string name="untrackItem">Untrack item</string>
+    <string name="newPrice">New item price!! !</string>
+    <string name="newPrceTxt">New price: $ "</string>
 
 </resources>
