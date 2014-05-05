@@ -63,20 +63,32 @@ public class VIPFragment extends Fragment implements ItemDetailsTask.ItemDetails
             this.trackedItem = savedInstanceState.getBoolean(VIPFragment.TRACKED_ITEM);
         }
         if(shouldFillDetails){
+            //Si todavía no cargué los detalles, los busco.
             fillItemDetails();
         }
-        trackButton = (Button)view.findViewById(R.id.track_item);
-        trackItemProgress = (ProgressBar)view.findViewById(R.id.track_item_progress);
+        //Cargo la vista con los detalles del Item
+        updateItemDetails(this.item, view);
+
+        initTrackingSettings(view);
+
+        return view;
+    }
+
+    public void initTrackingSettings(View view){
+        //Obtengo los componentes que se utilizaran para evitar haver findViewById de mas y seteo el
+        //listener del botón.
+        this.trackButton = (Button)view.findViewById(R.id.track_item);
+        this.trackItemProgress = (ProgressBar)view.findViewById(R.id.track_item_progress);
         if(this.trackedItem){
             notifyTrackedItem();
         }
-        trackButton.setOnClickListener(new View.OnClickListener() {
+        this.trackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onTrackButtonClick();
             }
         });
-        updateItemDetails(this.item, view);
+
         //Escucha si el item estaba trackeado.
         LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(getActivity());
         IntentFilter intentFilter = new IntentFilter();
@@ -88,10 +100,7 @@ public class VIPFragment extends Fragment implements ItemDetailsTask.ItemDetails
         intent.putExtra(TrackItemService.ACTION_NAME,TrackItemService.READ_ITEM);
         intent.putExtra(TrackItemService.ITEM,this.item);
         getActivity().startService(intent);
-        //return super.onCreateView(inflater, container, savedInstanceState);
-        return view;
     }
-
     public void fillItemDetails(){
         //Verifico la conectividad
         ConnectivityManager connMgr = (ConnectivityManager)
@@ -100,7 +109,7 @@ public class VIPFragment extends Fragment implements ItemDetailsTask.ItemDetails
         //Si hay conexión, ejecuto la búsqueda
         if (networkInfo != null && networkInfo.isConnected()) {
             this.task = new ItemDetailsTask(this);
-            task.execute(this.item.getId());
+            this.task.execute(this.item.getId());
         }
     }
 
@@ -130,10 +139,10 @@ public class VIPFragment extends Fragment implements ItemDetailsTask.ItemDetails
         //Verifico si se ejecuto el task
         if(this.task != null && this.task.getStatus() == AsyncTask.Status.FINISHED) {
             outState.putBoolean(VIPFragment.TASK_COMPLETED, true);
-        } else if(task != null && !AsyncTask.Status.FINISHED.equals(task.getStatus())){
+        } else if(this.task != null && !AsyncTask.Status.FINISHED.equals(this.task.getStatus())){
             //Si se creó el asyncTask y se está ejecutando, cancelo el task.
-            task.detach();
-            task.cancel(true);
+            this.task.detach();
+            this.task.cancel(true);
             outState.putBoolean(VIPFragment.TASK_COMPLETED,false);
         }
         super.onSaveInstanceState(outState);
@@ -142,11 +151,13 @@ public class VIPFragment extends Fragment implements ItemDetailsTask.ItemDetails
     @Override
     public void onPause() {
         super.onPause();
+        //Saco el activity actual de la lista de receivers.
         LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(getActivity());
-        bManager.unregisterReceiver(bReceiver);
+        bManager.unregisterReceiver(this.bReceiver);
     }
 
     public void onTrackButtonClick() {
+        //Inicio el servicio para guardar o borrar el Item de la db según corresponda
         Intent intent = new Intent(getActivity(), TrackItemService.class);
         if(!this.trackedItem){
             intent.putExtra(TrackItemService.ACTION_NAME,TrackItemService.SAVE_ITEM);
@@ -162,6 +173,9 @@ public class VIPFragment extends Fragment implements ItemDetailsTask.ItemDetails
     public static final String DELETED_ITEM = "com.ar.activity.DELETED_ITEM";
 
 
+    /**
+     * Obtengo una notificación del servicio y ejecuto la acción correspondiente.
+     */
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -182,18 +196,18 @@ public class VIPFragment extends Fragment implements ItemDetailsTask.ItemDetails
         this.trackButton.setText(getString(R.string.untrackItem));
         this.trackedItem = true;
         this.trackButton.setVisibility(View.VISIBLE);
-        if(trackItemProgress != null){
-            trackItemProgress.setVisibility(View.GONE);
-            trackItemProgress = null;
+        if(this.trackItemProgress != null){
+            this.trackItemProgress.setVisibility(View.GONE);
+            this.trackItemProgress = null;
         }
     }
     public void notifyUntrackedItem(){
         this.trackButton.setText(getString(R.string.trackItem));
         this.trackedItem = false;
         this.trackButton.setVisibility(View.VISIBLE);
-        if(trackItemProgress != null){
-            trackItemProgress.setVisibility(View.GONE);
-            trackItemProgress = null;
+        if(this.trackItemProgress != null){
+            this.trackItemProgress.setVisibility(View.GONE);
+            this.trackItemProgress = null;
         }
     }
 }
