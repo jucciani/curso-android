@@ -33,7 +33,9 @@
             android:name="com.ar.activity.VIPActivity"
             android:label="@string/title_activity_vip" >
         </activity>
-        <service android:name=".service.TrackItemService"/>
+        <service
+                android:name=".service.TrackItemService"
+                android:exported="false"/>
     </application>
 
 </manifest>
