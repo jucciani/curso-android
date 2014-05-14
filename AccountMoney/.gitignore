@@ -1,0 +1,25 @@
+Melifile
+*.orig
+*.class
+.settings
+*stacktrace
+.classpath
+.project
+*.log
+
+#Directorios de binarios de compilacion
+.gradle/*
+/app/build/*
+/gradle/*
+
+.idea/
+Ej1.iml
+app/app.iml
+app/build.gradle
+app/lint.xml
+build.gradle
+gradlew
+gradlew.bat
+import-summary.txt
+local.properties
+settings.gradle

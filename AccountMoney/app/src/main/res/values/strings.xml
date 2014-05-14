@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">AccountMoney</string>
+    <string name="new_password_description">Es una segunda clave que permite que solo tú realices pagos con tu dinero en cuenta.</string>
+    <string name="input_password_description">Ingresa tu clave de pagos y retiros</string>
+    <string name="input_answer_description">Ingresa tu respuesta secreta</string>
+    <string name="action_settings">Settings</string>
+    <string name="password">Password:</string>
+    <string name="confirm_password">Confirm password:</string>
+    <string name="secret_question">Secret question:</string>
+    <string name="secret_answer">Secret answer:</string>
+    <string name="forgot_password">¿Olvidaste tu clave?</string>
+    <string name="back_to_password">Volver</string>
+    <string name="confirm">Confirmar</string>
+
+    <string-array name="secret_questions">
+        <item>Cuál es el segundo nombre de mi padre?</item>
+        <item>Cuál es mi apellido materno?</item>
+        <item>Cuál es el nombre del sanatorio donde nací?</item>
+        <item>Cómo se llama mi colegio secundario?</item>
+        <item>Cuál es el nombre de mi abuela materna?</item>
+        <item>Cuál es el nombre de mi abuelo materno?</item>
+        <item>Cuál es mi serie favorita?</item>
+        <item>Cuál es mi canción favorita?</item>
+        <item>Cuál es mi lugar favorito de vacaciones?</item>
+        <item>Cuáles son la marca y el modelo de mi primer auto?</item>
+    </string-array>
+
+</resources>
