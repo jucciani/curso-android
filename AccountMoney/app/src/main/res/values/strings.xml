@@ -27,4 +27,6 @@
         <item>Cuáles son la marca y el modelo de mi primer auto?</item>
     </string-array>
 
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

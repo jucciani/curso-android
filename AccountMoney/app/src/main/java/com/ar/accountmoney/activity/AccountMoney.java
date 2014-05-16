@@ -1,28 +1,58 @@
 package com.ar.accountmoney.activity;
 
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 
-public class AccountMoney extends ActionBarActivity {
+public class AccountMoney extends ActionBarActivity implements IAccountMoneyListener {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_money);
+        //Inicializo el fragment de CreatePassword
+        if(getSupportFragmentManager().findFragmentById(R.id.account_money_fragment) == null){
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.account_money_fragment, CreatePasswordFragment.newInstance());
+            transaction.commit();
+        }
+        //Inicializo el fragment de InputPassword
+        if(getSupportFragmentManager().findFragmentById(R.id.account_money_fragment) == null){
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.account_money_fragment, InputPasswordFragment.newInstance());
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+    }
 
-        Spinner spinner = (Spinner) findViewById(R.id.secret_questions);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.secret_questions, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
+    @Override
+    public void onConfirmCreatePassword() {
+
+    }
+
+    @Override
+    public void onConfirmPassword() {
+
+    }
+
+    @Override
+    public void onForgotPassword() {
+        //Inicializo el fragment de InputSecretAnswer
+        //if(getSupportFragmentManager().findFragmentById(R.id.account_money_fragment) == null){
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.account_money_fragment, InputSecretAnswerFragment.newInstance());
+            transaction.addToBackStack(null);
+            transaction.commit();
+        //}
+    }
+
+    @Override
+    public void onConfirmSecretAnswer() {
+
     }
 
 
