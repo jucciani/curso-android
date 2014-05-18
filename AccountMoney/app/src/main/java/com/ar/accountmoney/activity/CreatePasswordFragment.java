@@ -69,8 +69,13 @@ public class CreatePasswordFragment extends Fragment {
     }
 
     private boolean validatePasswords() {
+        //Obtengo los campos a validar y componente de error
         String password = ((EditText)getView().findViewById(R.id.new_password)).getText().toString();
         String repeatedPassword = ((EditText)getView().findViewById(R.id.repeated_new_password)).getText().toString();
+        TextView passwordErrorView = (TextView) getView().findViewById(R.id.new_password_error);
+        TextView repeatedPasswordErrorView = (TextView) getView().findViewById(R.id.repeated_new_password_error);
+
+        //Valido el campo de password
         boolean validPassword = (password != null && password.length() >= 8 && password.length() <= 20);
         if(!validPassword){
             String errorMsg;
@@ -79,11 +84,13 @@ public class CreatePasswordFragment extends Fragment {
             } else {
                 errorMsg = getString(R.string.password_hints);
             }
-            ((TextView)getView().findViewById(R.id.new_password_error)).setText(errorMsg);
-            ((TextView)getView().findViewById(R.id.new_password_error)).setVisibility(View.VISIBLE);
+            passwordErrorView.setText(errorMsg);
+            passwordErrorView.setVisibility(View.VISIBLE);
         } else {
-            ((TextView)getView().findViewById(R.id.new_password_error)).setVisibility(View.GONE);
+            passwordErrorView.setVisibility(View.GONE);
         }
+
+        //Valido el campo repeatedPassword
         boolean validRepeatedPassword = (repeatedPassword != null && password.length() > 0 && password.equals(repeatedPassword));
         if(!validRepeatedPassword){
             String errorMsg;
@@ -92,18 +99,22 @@ public class CreatePasswordFragment extends Fragment {
             } else {
                 errorMsg = getString(R.string.repeated_password_error);
             }
-            ((TextView)getView().findViewById(R.id.repeated_new_password_error)).setText(errorMsg);
-            ((TextView)getView().findViewById(R.id.repeated_new_password_error)).setVisibility(View.VISIBLE);
+            repeatedPasswordErrorView.setText(errorMsg);
+            repeatedPasswordErrorView.setVisibility(View.VISIBLE);
         } else {
-            ((TextView)getView().findViewById(R.id.repeated_new_password_error)).setVisibility(View.GONE);
+            repeatedPasswordErrorView.setVisibility(View.GONE);
         }
         return validPassword && validRepeatedPassword;
     }
 
     private boolean validateSecretAnswer() {
+        //Obtengo los campos a validar y componente de error
         String secretAnswer = ((EditText)getView().findViewById(R.id.new_secret_answer)).getText().toString();
+        TextView secretAnswerErrorView = (TextView) getView().findViewById(R.id.new_secret_answer_error);
+
+        //Valido el campo secretAnswer
         if (secretAnswer != null && secretAnswer.length() >= 8 && secretAnswer.length() <= 20){
-            ((TextView)getView().findViewById(R.id.new_secret_answer_error)).setVisibility(View.GONE);
+            secretAnswerErrorView.setVisibility(View.GONE);
             return true;
         } else {
             String errorMsg;
@@ -112,8 +123,8 @@ public class CreatePasswordFragment extends Fragment {
             } else {
                 errorMsg = getString(R.string.secret_answer_error);
             }
-            ((TextView)getView().findViewById(R.id.new_secret_answer_error)).setText(errorMsg);
-            ((TextView)getView().findViewById(R.id.new_secret_answer_error)).setVisibility(View.VISIBLE);
+            secretAnswerErrorView.setText(errorMsg);
+            secretAnswerErrorView.setVisibility(View.VISIBLE);
             return false;
         }
     }
