@@ -48,7 +48,7 @@ public class AccountMoneyAuthInfoTask extends AsyncTask<Void, Void, AccountMoney
             //}
             authInfo.setQuestionId("1");
             authInfo.setSecretAnswer("MERCADOLIBRE");
-            //authInfo.setSecondPwd("android"); //Comment for new password
+            authInfo.setSecondPwd("android"); //Comment for new password
         }
         return authInfo;
     }

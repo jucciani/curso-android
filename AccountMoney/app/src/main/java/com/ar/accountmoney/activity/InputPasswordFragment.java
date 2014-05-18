@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 
 public class InputPasswordFragment extends Fragment {
@@ -40,10 +41,29 @@ public class InputPasswordFragment extends Fragment {
         view.findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activityCallback.onConfirmPassword();
+                onConfirmPassword();
             }
         });
         return view;
+    }
+
+    private void onConfirmPassword(){
+        if(validateInputPassword()){
+           activityCallback.onConfirmPassword();
+        }
+    }
+    private boolean validateInputPassword() {
+        //Obtengo los campos a validar
+        EditText inputPassword = (EditText)getView().findViewById(R.id.input_password);
+        String password = inputPassword.getText().toString();
+
+        //Valido el campo inputPassword
+        if (password != null && password.length() > 0){
+            return true;
+        } else {
+            inputPassword.setError(getString(R.string.required_error));
+            return false;
+        }
     }
 
     @Override

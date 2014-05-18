@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 
@@ -38,10 +39,30 @@ public class InputSecretAnswerFragment extends Fragment {
         view.findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activityCallback.onConfirmPassword();
+                onConfirmSecretAnswer();
             }
         });
         return view;
+    }
+
+
+    private void onConfirmSecretAnswer(){
+        if(validateInputPassword()){
+            activityCallback.onConfirmSecretAnswer();
+        }
+    }
+    private boolean validateInputPassword() {
+        //Obtengo los campos a validar
+        EditText inputAnswer = (EditText)getView().findViewById(R.id.input_secret_answer);
+        String answer = inputAnswer.getText().toString();
+
+        //Valido el campo inputPassword
+        if (answer != null && answer.length() > 0){
+            return true;
+        } else {
+            inputAnswer.setError(getString(R.string.required_error));
+            return false;
+        }
     }
 
     @Override
