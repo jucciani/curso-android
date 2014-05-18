@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 
 public class CreatePasswordFragment extends Fragment {
 
@@ -68,26 +70,34 @@ public class CreatePasswordFragment extends Fragment {
         }
     }
 
+    private static final String FORBIDDEN_CHARACTERS[] = {"*", " ", "-"};
+
     private boolean validatePasswords() {
-        //Obtengo los campos a validar y componente de error
+        //Obtengo los campos a validar
         String password = ((EditText)getView().findViewById(R.id.new_password)).getText().toString();
         String repeatedPassword = ((EditText)getView().findViewById(R.id.repeated_new_password)).getText().toString();
-        TextView passwordErrorView = (TextView) getView().findViewById(R.id.new_password_error);
-        TextView repeatedPasswordErrorView = (TextView) getView().findViewById(R.id.repeated_new_password_error);
 
         //Valido el campo de password
         boolean validPassword = (password != null && password.length() >= 8 && password.length() <= 20);
         if(!validPassword){
             String errorMsg;
-            if(password == null || password.length() == 0){
-                errorMsg = getString(R.string.required);
+            if(password == null || password.length() == 0) {
+                errorMsg = getString(R.string.required_error);
             } else {
-                errorMsg = getString(R.string.password_hints);
+                errorMsg = getString(R.string.length_error);
             }
-            passwordErrorView.setText(errorMsg);
-            passwordErrorView.setVisibility(View.VISIBLE);
-        } else {
-            passwordErrorView.setVisibility(View.GONE);
+            ((EditText)getView().findViewById(R.id.new_password)).setError(errorMsg);
+        }
+        //Valido caracteres inválidos
+        if(validPassword) {
+            for (String forbiddenChar : FORBIDDEN_CHARACTERS) {
+                if (password.indexOf(forbiddenChar) >= 0) {
+                    validPassword = false;
+                }
+            }
+            if (!validPassword) {
+                ((EditText) getView().findViewById(R.id.new_password)).setError(getString(R.string.password_hints));
+            }
         }
 
         //Valido el campo repeatedPassword
@@ -95,36 +105,30 @@ public class CreatePasswordFragment extends Fragment {
         if(!validRepeatedPassword){
             String errorMsg;
             if(repeatedPassword == null || repeatedPassword.length() == 0){
-                errorMsg = getString(R.string.required);
+                errorMsg = getString(R.string.required_error);
             } else {
-                errorMsg = getString(R.string.repeated_password_error);
+                errorMsg = getString(R.string.equals_pass_error);
             }
-            repeatedPasswordErrorView.setText(errorMsg);
-            repeatedPasswordErrorView.setVisibility(View.VISIBLE);
-        } else {
-            repeatedPasswordErrorView.setVisibility(View.GONE);
+            ((EditText)getView().findViewById(R.id.repeated_new_password)).setError(errorMsg);
         }
         return validPassword && validRepeatedPassword;
     }
 
     private boolean validateSecretAnswer() {
-        //Obtengo los campos a validar y componente de error
+        //Obtengo los campos a validar
         String secretAnswer = ((EditText)getView().findViewById(R.id.new_secret_answer)).getText().toString();
-        TextView secretAnswerErrorView = (TextView) getView().findViewById(R.id.new_secret_answer_error);
 
         //Valido el campo secretAnswer
         if (secretAnswer != null && secretAnswer.length() >= 8 && secretAnswer.length() <= 20){
-            secretAnswerErrorView.setVisibility(View.GONE);
             return true;
         } else {
             String errorMsg;
             if(secretAnswer == null || secretAnswer.length() == 0){
-                errorMsg = getString(R.string.required);
+                errorMsg = getString(R.string.required_error);
             } else {
-                errorMsg = getString(R.string.secret_answer_error);
+                errorMsg = getString(R.string.length_error);
             }
-            secretAnswerErrorView.setText(errorMsg);
-            secretAnswerErrorView.setVisibility(View.VISIBLE);
+            ((EditText)getView().findViewById(R.id.new_secret_answer)).setError(errorMsg);
             return false;
         }
     }
