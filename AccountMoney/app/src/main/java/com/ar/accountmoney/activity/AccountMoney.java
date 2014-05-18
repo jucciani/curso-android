@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.ar.accountmoney.dto.AccountMoneyAuthInfo;
 import com.ar.accountmoney.task.AccountMoneyAuthInfoTask;
 
 import java.util.Map;
@@ -23,8 +24,8 @@ public class AccountMoney extends ActionBarActivity implements IAccountMoneyList
     }
 
     @Override
-    public void handleAuthInfo(Map<String, Object> authInfo) {
-        if(authInfo.get("secondPwd") == null){
+    public void handleAuthInfo(AccountMoneyAuthInfo authInfo) {
+        if(authInfo.getSecondPwd() == null){
             //Inicializo el fragment de CreatePassword
             if(getSupportFragmentManager().findFragmentById(R.id.account_money_fragment) == null){
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

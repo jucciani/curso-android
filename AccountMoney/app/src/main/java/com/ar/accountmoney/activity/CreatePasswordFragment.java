@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 
 public class CreatePasswordFragment extends Fragment {
@@ -46,10 +48,74 @@ public class CreatePasswordFragment extends Fragment {
         view.findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activityCallback.onConfirmPassword();
+                onConfirmCreatePassword();
             }
         });
         return view;
+    }
+
+    private void onConfirmCreatePassword(){
+        validateFormData();
+    }
+
+    private void validateFormData(){
+
+        boolean validForm = true;
+        validForm &= validatePasswords();
+        validForm &= validateSecretAnswer();
+        if(validForm){
+            activityCallback.onConfirmCreatePassword();
+        }
+    }
+
+    private boolean validatePasswords() {
+        String password = ((EditText)getView().findViewById(R.id.new_password)).getText().toString();
+        String repeatedPassword = ((EditText)getView().findViewById(R.id.repeated_new_password)).getText().toString();
+        boolean validPassword = (password != null && password.length() >= 8 && password.length() <= 20);
+        if(!validPassword){
+            String errorMsg;
+            if(password == null || password.length() == 0){
+                errorMsg = getString(R.string.required);
+            } else {
+                errorMsg = getString(R.string.password_hints);
+            }
+            ((TextView)getView().findViewById(R.id.new_password_error)).setText(errorMsg);
+            ((TextView)getView().findViewById(R.id.new_password_error)).setVisibility(View.VISIBLE);
+        } else {
+            ((TextView)getView().findViewById(R.id.new_password_error)).setVisibility(View.GONE);
+        }
+        boolean validRepeatedPassword = (repeatedPassword != null && password.length() > 0 && password.equals(repeatedPassword));
+        if(!validRepeatedPassword){
+            String errorMsg;
+            if(repeatedPassword == null || repeatedPassword.length() == 0){
+                errorMsg = getString(R.string.required);
+            } else {
+                errorMsg = getString(R.string.repeated_password_error);
+            }
+            ((TextView)getView().findViewById(R.id.repeated_new_password_error)).setText(errorMsg);
+            ((TextView)getView().findViewById(R.id.repeated_new_password_error)).setVisibility(View.VISIBLE);
+        } else {
+            ((TextView)getView().findViewById(R.id.repeated_new_password_error)).setVisibility(View.GONE);
+        }
+        return validPassword && validRepeatedPassword;
+    }
+
+    private boolean validateSecretAnswer() {
+        String secretAnswer = ((EditText)getView().findViewById(R.id.new_secret_answer)).getText().toString();
+        if (secretAnswer != null && secretAnswer.length() >= 8 && secretAnswer.length() <= 20){
+            ((TextView)getView().findViewById(R.id.new_secret_answer_error)).setVisibility(View.GONE);
+            return true;
+        } else {
+            String errorMsg;
+            if(secretAnswer == null || secretAnswer.length() == 0){
+                errorMsg = getString(R.string.required);
+            } else {
+                errorMsg = getString(R.string.secret_answer_error);
+            }
+            ((TextView)getView().findViewById(R.id.new_secret_answer_error)).setText(errorMsg);
+            ((TextView)getView().findViewById(R.id.new_secret_answer_error)).setVisibility(View.VISIBLE);
+            return false;
+        }
     }
 
     @Override

@@ -13,6 +13,18 @@
     <string name="forgot_password">¿Olvidaste tu clave?</string>
     <string name="back_to_password">Volver</string>
     <string name="confirm">Confirmar</string>
+    <string name="required">Completa este dato.</string>
+    <string name="password_hints">
+        Debe tener entre 8 y 20 caracteres.\n
+        No uses números correlativos.\n
+        Elige una clave distinta a tu e-mail.\n
+        Elige una clave distinta de tu nombre, tu apellido o tu apodo.\n
+        No uses * - ni espacios.\n
+        No uses la misma clave que tienes para MercadoLibre.
+    </string>
+    <string name="repeated_password_error">Ambas claves deben ser iguales.</string>
+    <string name="secret_answer_error">Debe tener entre 8 y 20 caracteres.</string>
+
 
     <string-array name="secret_questions">
         <item>Cuál es el segundo nombre de mi padre?</item>
