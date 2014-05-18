@@ -6,6 +6,7 @@ package com.ar.accountmoney.dto;
 public class AccountMoneyAuthInfo {
     private String authCode;
     private boolean authCodeRequired;
+    private boolean secondPassCreated;
     private String questionId;
     private String secretAnswer;
     private String secondPwd;
@@ -24,6 +25,14 @@ public class AccountMoneyAuthInfo {
 
     public boolean isAuthCodeRequired() {
         return authCodeRequired;
+    }
+
+    public void setSecondPassCreated(boolean secondPassCreated) {
+        this.secondPassCreated = secondPassCreated;
+    }
+
+    public boolean isSecondPassCreated() {
+        return secondPassCreated;
     }
 
     public void setQuestionId(String questionId) {

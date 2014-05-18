@@ -10,8 +10,6 @@ import android.view.View;
 import com.ar.accountmoney.dto.AccountMoneyAuthInfo;
 import com.ar.accountmoney.task.AccountMoneyAuthInfoTask;
 
-import java.util.Map;
-
 
 public class AccountMoney extends ActionBarActivity implements IAccountMoneyListener, AccountMoneyAuthInfoTask.IAccountMoneyAuthInfoHandler {
 

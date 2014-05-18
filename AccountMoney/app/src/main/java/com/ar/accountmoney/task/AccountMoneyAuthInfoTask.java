@@ -4,9 +4,6 @@ import android.os.AsyncTask;
 
 import com.ar.accountmoney.dto.AccountMoneyAuthInfo;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by jucciani on 15/05/14.
  */
@@ -39,16 +36,15 @@ public class AccountMoneyAuthInfoTask extends AsyncTask<Void, Void, AccountMoney
         authInfo.setAuthCodeRequired(true); //Comment to skip password
 
         if(authInfo.isAuthCodeRequired()){
-            // getResourceFromURL /jm/services/mp/v1.0/loginService/getSecondPwdQuestion/$custId&$siteId
-            //if(jsonData?.toString()!='{}'){
-                //se parsea el questionID a string para poder machear con todos questionId del site.
-                //return["questionId":"${jsonData.secret_question_id}",
-                //        "answer":jsonData.answer,
-                //        "secondPwd":jsonData.second_password]
-            //}
-            authInfo.setQuestionId("1");
-            authInfo.setSecretAnswer("MERCADOLIBRE");
-            authInfo.setSecondPwd("android"); //Comment for new password
+            //users/$id/hasSecondPass
+            //returns 'has_second_pass'
+            authInfo.setSecondPassCreated(true); //False to create password
+
+            if(authInfo.isSecondPassCreated()){
+                //users/$id/secretquestion
+                //return 'secret_question_id'
+                authInfo.setQuestionId("1");
+            }
         }
         return authInfo;
     }
