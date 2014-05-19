@@ -23,7 +23,7 @@ public class AccountMoney extends ActionBarActivity implements IAccountMoneyList
 
     @Override
     public void handleAuthInfo(AccountMoneyAuthInfo authInfo) {
-        if(authInfo.getSecondPwd() == null){
+        if(!authInfo.isSecondPassCreated()){
             //Inicializo el fragment de CreatePassword
             if(getSupportFragmentManager().findFragmentById(R.id.account_money_fragment) == null){
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
