@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.ar.accountmoney.dto.AccountMoneyAuthInfo;
+
 
 public class InputPasswordFragment extends Fragment {
 
@@ -16,11 +18,8 @@ public class InputPasswordFragment extends Fragment {
     /**
      * Crea una nueva instancia del InputPasswordFragment.
      */
-    public static InputPasswordFragment newInstance() {
+    public static InputPasswordFragment newInstance(AccountMoneyAuthInfo authInfo) {
         InputPasswordFragment newFragment = new InputPasswordFragment();
-        //Bundle args = new Bundle();
-        //args.putString("PARAM", pram);
-        //newFragment.setArguments(args);
         return newFragment;
     }
 

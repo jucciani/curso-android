@@ -1,13 +1,15 @@
 package com.ar.accountmoney.dto;
 
+import java.io.Serializable;
+
 /**
  * Created by jucciani on 17/05/14.
  */
-public class AccountMoneyAuthInfo {
+public class AccountMoneyAuthInfo implements Serializable{
     private String authCode;
     private boolean authCodeRequired;
     private boolean secondPassCreated;
-    private String questionId;
+    private int questionId;
     private String secretAnswer;
     private String secondPwd;
 
@@ -35,11 +37,11 @@ public class AccountMoneyAuthInfo {
         return secondPassCreated;
     }
 
-    public void setQuestionId(String questionId) {
+    public void setQuestionId(int questionId) {
         this.questionId = questionId;
     }
 
-    public String getQuestionId() {
+    public int getQuestionId() {
         return questionId;
     }
 

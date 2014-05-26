@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.ar.accountmoney.dto.AccountMoneyAuthInfo;
+
 
 public class CreatePasswordFragment extends Fragment {
 
@@ -18,11 +20,8 @@ public class CreatePasswordFragment extends Fragment {
     /**
      * Crea una nueva instancia del CreatePasswordFragment.
      */
-    public static CreatePasswordFragment newInstance() {
+    public static CreatePasswordFragment newInstance(AccountMoneyAuthInfo authInfo) {
         CreatePasswordFragment newFragment = new CreatePasswordFragment();
-        //Bundle args = new Bundle();
-        //args.putString("PARAM", pram);
-        //newFragment.setArguments(args);
         return newFragment;
     }
 
