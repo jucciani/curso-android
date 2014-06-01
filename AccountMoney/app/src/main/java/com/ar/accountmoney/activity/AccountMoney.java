@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 import com.ar.accountmoney.dto.AccountMoneyAuthInfo;
 import com.ar.accountmoney.task.AccountMoneyAuthInfoTask;
@@ -24,22 +25,29 @@ public class AccountMoney extends ActionBarActivity implements IAccountMoneyList
 
     @Override
     public void handleAuthInfo(AccountMoneyAuthInfo authInfo) {
-        if(!authInfo.isSecondPassCreated()){
-            //Inicializo el fragment de CreatePassword
-            if(getSupportFragmentManager().findFragmentById(R.id.account_money_fragment) == null){
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.account_money_fragment, CreatePasswordFragment.newInstance(authInfo));
-                transaction.commit();
+        this.authInfo = authInfo;
+        if(authInfo.isAuthCodeRequired()){
+            if(!authInfo.isSecondPassCreated()){
+                //Inicializo el fragment de CreatePassword
+                if(getSupportFragmentManager().findFragmentById(R.id.account_money_fragment) == null){
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.account_money_fragment, CreatePasswordFragment.newInstance(authInfo));
+                    transaction.commit();
+                }
+            } else {
+                //Inicializo el fragment de InputPassword
+                if(getSupportFragmentManager().findFragmentById(R.id.account_money_fragment) == null){
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.account_money_fragment, InputPasswordFragment.newInstance(authInfo));
+                    transaction.commit();
+                }
             }
+            findViewById(R.id.progressBar).setVisibility(View.GONE);
         } else {
-            //Inicializo el fragment de InputPassword
-            if(getSupportFragmentManager().findFragmentById(R.id.account_money_fragment) == null){
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.account_money_fragment, InputPasswordFragment.newInstance(authInfo));
-                transaction.commit();
-            }
+            EditText editText = new EditText(this);
+            editText.setText("Not required");
+            setContentView(editText);
         }
-        findViewById(R.id.progressBar).setVisibility(View.GONE);
     }
 
     @Override
