@@ -1,10 +1,10 @@
-package com.ar.accountmoney.task;
+package com.ar.lib.accountmoney.task;
 
 import android.net.Uri;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 
-import com.ar.accountmoney.dto.AccountMoneyAuthInfo;
+import com.ar.lib.accountmoney.dto.AccountMoneyAuthInfo;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -37,16 +37,20 @@ public class AccountMoneyAuthInfoTask extends AsyncTask<Void, Void, AccountMoney
     private static final String HAS_SECOND_PASS = "has_second_pass";
     private static final String SECRET_QUESTION_ID = "secret_question_id";
     //URIs
-    private static final String GET_AUTH_DATA_URI = "http://10.0.3.2:35000/payment_auth?caller.id=157286354";
-    private static final String HAS_SECOND_PASS_URI = "http://10.0.3.2:35000/internal/users/157286354/hasSecondPass?caller.id=157286354";
-    private static final String SECRET_QUESTION_ID_URI = "http://10.0.3.2:35000/internal/users/157286354/secretquestion?caller.id=157286354";
+    private static final String CALLER_ID_URI = "?caller.id=";
+    private static final String GET_AUTH_DATA_URI = "http://10.0.3.2:35000/payment_auth";
+    private static final String BASE_USER_API_URI = "http://10.0.3.2:35000/internal/users/";
+    private static final String HAS_SECOND_PASS_URI = "/hasSecondPass";
+    private static final String SECRET_QUESTION_ID_URI = "/secretquestion";
     private IAccountMoneyAuthInfoHandler handler;
+    private String userId;
 
     public interface IAccountMoneyAuthInfoHandler {
         public void handleAuthInfo(AccountMoneyAuthInfo authInfo);
     }
 
-    public AccountMoneyAuthInfoTask(IAccountMoneyAuthInfoHandler handler) {
+    public AccountMoneyAuthInfoTask(String userId, IAccountMoneyAuthInfoHandler handler) {
+        this.userId = userId;
         this.handler = handler;
     }
 
@@ -77,20 +81,20 @@ public class AccountMoneyAuthInfoTask extends AsyncTask<Void, Void, AccountMoney
     private void getAuthCode(AccountMoneyAuthInfo authInfo) throws JSONException {
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
         nameValuePairs.add(new BasicNameValuePair(PAYMENT_METHOD_ID, ACCOUNT_MONEY));
-        JSONObject result = postToUri(GET_AUTH_DATA_URI, nameValuePairs);
+        JSONObject result = postToUri(GET_AUTH_DATA_URI+CALLER_ID_URI+userId, nameValuePairs);
         System.out.println(result);
         authInfo.setAuthCode(result.getString(AUTH_CODE));
         authInfo.setAuthCodeRequired(REQUIRED_ATTR.equals(result.getString(SECOND_AUTH_FACTOR)));
     }
 
     private void getSecondPassInfo(AccountMoneyAuthInfo authInfo) throws JSONException {
-        JSONObject result = getUriResult(HAS_SECOND_PASS_URI);
+        JSONObject result = getUriResult(BASE_USER_API_URI+this.userId+HAS_SECOND_PASS_URI+CALLER_ID_URI+userId);
         System.out.println(result);
         authInfo.setSecondPassCreated(result.getBoolean(HAS_SECOND_PASS));
     }
 
     private void getSecretQuestionInfo(AccountMoneyAuthInfo authInfo) throws JSONException {
-        JSONObject result = getUriResult(SECRET_QUESTION_ID_URI);
+        JSONObject result = getUriResult(BASE_USER_API_URI+this.userId+SECRET_QUESTION_ID_URI+CALLER_ID_URI+userId);
         System.out.println(result);
         authInfo.setQuestionId(result.getInt(SECRET_QUESTION_ID));
     }

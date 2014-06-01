@@ -1,4 +1,4 @@
-package com.ar.accountmoney.activity;
+package com.ar.lib.accountmoney.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.ar.lib.accountmoney.R;
+
+import com.ar.lib.accountmoney.listener.IAccountMoneyListener;
 
 
 public class InputSecretAnswerFragment extends Fragment {

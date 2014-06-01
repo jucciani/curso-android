@@ -1,4 +1,4 @@
-package com.ar.accountmoney.activity;
+package com.ar.lib.accountmoney.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import com.ar.lib.accountmoney.R;
 
-import com.ar.accountmoney.dto.AccountMoneyAuthInfo;
+import com.ar.lib.accountmoney.dto.AccountMoneyAuthInfo;
+import com.ar.lib.accountmoney.listener.IAccountMoneyListener;
 
 
 public class CreatePasswordFragment extends Fragment {

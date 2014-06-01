@@ -8,8 +8,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-import com.ar.accountmoney.dto.AccountMoneyAuthInfo;
-import com.ar.accountmoney.task.AccountMoneyAuthInfoTask;
+import com.ar.lib.accountmoney.dto.AccountMoneyAuthInfo;
+import com.ar.lib.accountmoney.fragment.CreatePasswordFragment;
+import com.ar.lib.accountmoney.fragment.InputPasswordFragment;
+import com.ar.lib.accountmoney.fragment.InputSecretAnswerFragment;
+import com.ar.lib.accountmoney.listener.IAccountMoneyListener;
+import com.ar.lib.accountmoney.task.AccountMoneyAuthInfoTask;
 
 
 public class AccountMoney extends ActionBarActivity implements IAccountMoneyListener, AccountMoneyAuthInfoTask.IAccountMoneyAuthInfoHandler {
@@ -20,7 +24,7 @@ public class AccountMoney extends ActionBarActivity implements IAccountMoneyList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_money);
-        new AccountMoneyAuthInfoTask(this).execute();
+        new AccountMoneyAuthInfoTask("157286354",this).execute();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.ar.accountmoney.activity;
+package com.ar.lib.accountmoney.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import com.ar.lib.accountmoney.R;
 
-import com.ar.accountmoney.dto.AccountMoneyAuthInfo;
+import com.ar.lib.accountmoney.dto.AccountMoneyAuthInfo;
+import com.ar.lib.accountmoney.listener.IAccountMoneyListener;
 
 
 public class InputPasswordFragment extends Fragment {

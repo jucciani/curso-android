@@ -1,4 +1,4 @@
-package com.ar.accountmoney.dto;
+package com.ar.lib.accountmoney.dto;
 
 import java.io.Serializable;
 
