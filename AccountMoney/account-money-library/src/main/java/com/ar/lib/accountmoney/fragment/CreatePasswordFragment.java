@@ -13,11 +13,17 @@ import com.ar.lib.accountmoney.R;
 
 import com.ar.lib.accountmoney.dto.AccountMoneyAuthInfo;
 import com.ar.lib.accountmoney.listener.IAccountMoneyListener;
+import com.ar.lib.accountmoney.task.CreateSecondPasswordTask;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class CreatePasswordFragment extends Fragment {
 
     private IAccountMoneyListener activityCallback;
+    private String userId = "157286354";
+    private String siteId = "MLA";
 
     /**
      * Crea una nueva instancia del CreatePasswordFragment.
@@ -59,21 +65,30 @@ public class CreatePasswordFragment extends Fragment {
     }
 
     private void validateFormData(){
-
+        //Obtengo los campos a validar
+        String password = ((EditText)getView().findViewById(R.id.new_password)).getText().toString();
+        String repeatedPassword = ((EditText)getView().findViewById(R.id.repeated_new_password)).getText().toString();
+        String secretAnswer = ((EditText)getView().findViewById(R.id.new_secret_answer)).getText().toString();
+        String question = String.valueOf(((Spinner)getView().findViewById(R.id.secret_questions)).getSelectedItemPosition());
         boolean validForm = true;
-        validForm &= validatePasswords();
-        validForm &= validateSecretAnswer();
+        validForm &= validatePasswords(password, repeatedPassword);
+        validForm &= validateSecretAnswer(secretAnswer);
         if(validForm){
-            activityCallback.onConfirmCreatePassword();
+            Map<String, String> data = new HashMap<String, String>();
+            data.put(CreateSecondPasswordTask.CUST_ID,this.userId);
+            data.put(CreateSecondPasswordTask.SITE_ID,this.siteId);
+            data.put(CreateSecondPasswordTask.SECOND_PASS_ID,password);
+            data.put(CreateSecondPasswordTask.SECOND_PASS_REPEATED_ID,repeatedPassword);
+            data.put(CreateSecondPasswordTask.QUESTION_ID,question);
+            data.put(CreateSecondPasswordTask.SECRET_ANSWER_ID,secretAnswer);
+            new CreateSecondPasswordTask(data).execute();
+            //activityCallback.onConfirmCreatePassword();
         }
     }
 
     private static final String FORBIDDEN_CHARACTERS[] = {"*", " ", "-"};
 
-    private boolean validatePasswords() {
-        //Obtengo los campos a validar
-        String password = ((EditText)getView().findViewById(R.id.new_password)).getText().toString();
-        String repeatedPassword = ((EditText)getView().findViewById(R.id.repeated_new_password)).getText().toString();
+    private boolean validatePasswords(String password, String repeatedPassword) {
 
         //Valido el campo de password
         boolean validPassword = (password != null && password.length() >= 8 && password.length() <= 20);
@@ -112,9 +127,7 @@ public class CreatePasswordFragment extends Fragment {
         return validPassword && validRepeatedPassword;
     }
 
-    private boolean validateSecretAnswer() {
-        //Obtengo los campos a validar
-        String secretAnswer = ((EditText)getView().findViewById(R.id.new_secret_answer)).getText().toString();
+    private boolean validateSecretAnswer(String secretAnswer) {
 
         //Valido el campo secretAnswer
         if (secretAnswer != null && secretAnswer.length() >= 8 && secretAnswer.length() <= 20){

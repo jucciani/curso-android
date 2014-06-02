@@ -82,20 +82,17 @@ public class AccountMoneyAuthInfoTask extends AsyncTask<Void, Void, AccountMoney
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
         nameValuePairs.add(new BasicNameValuePair(PAYMENT_METHOD_ID, ACCOUNT_MONEY));
         JSONObject result = postToUri(GET_AUTH_DATA_URI+CALLER_ID_URI+userId, nameValuePairs);
-        System.out.println(result);
         authInfo.setAuthCode(result.getString(AUTH_CODE));
         authInfo.setAuthCodeRequired(REQUIRED_ATTR.equals(result.getString(SECOND_AUTH_FACTOR)));
     }
 
     private void getSecondPassInfo(AccountMoneyAuthInfo authInfo) throws JSONException {
         JSONObject result = getUriResult(BASE_USER_API_URI+this.userId+HAS_SECOND_PASS_URI+CALLER_ID_URI+userId);
-        System.out.println(result);
         authInfo.setSecondPassCreated(result.getBoolean(HAS_SECOND_PASS));
     }
 
     private void getSecretQuestionInfo(AccountMoneyAuthInfo authInfo) throws JSONException {
         JSONObject result = getUriResult(BASE_USER_API_URI+this.userId+SECRET_QUESTION_ID_URI+CALLER_ID_URI+userId);
-        System.out.println(result);
         authInfo.setQuestionId(result.getInt(SECRET_QUESTION_ID));
     }
 
